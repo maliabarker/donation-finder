@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row" style="margin-top: 100px;">
+            <div class="col-lg-8 mt-auto">
+                <h1 class="mb-3">Charity Finder</h1>
+                <p>Lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum</p>
+            </div>
+            <div class="col-lg-4">
+                <img src="{{ url_for('static', filename='/img/donation_items.png') }}" alt="">
+            </div>
+        </div>
+        <div class="row justify-content-between text-center">
+            <div class="col-md-3" id="home-card">
+                <img src="{{ url_for('static', filename='/img/home_card_1.png') }}" alt="" class="img-fluid mx-auto d-block my-3">
+                <p>Log Items You Want To Donate</p>
+            </div>
+            <div class="col-md-3 col-offset-1" id="home-card">
+                <img src="{{ url_for('static', filename='/img/home_card_2.png') }}" alt="" class="img-fluid mx-auto d-block my-3">
+                <p>Track Your Favorite Donation Locations</p>
+            </div>
+            <div class="col-md-3 col-offset-1" id="home-card">
+                <img src="{{ url_for('static', filename='/img/home_card_3.png') }}" alt="" class="img-fluid mx-auto d-block">
+                <p>Match Your Items With Your Locations</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

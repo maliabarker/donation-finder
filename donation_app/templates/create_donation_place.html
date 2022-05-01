@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}Create New Donation Place{% endblock %}
+{% block content %}
+<div class="container">
+    <form method="POST" action="{{ url_for('main.donation_places_new') }}">
+        {{ form.csrf_token }}
+        <fieldset>
+            <legend>Create a New Donation Place</legend>
+
+            {{ form.title.label }}
+            {{ form.title }}
+            <ul>
+            {% for error in form.title.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.address.label }}
+            {{ form.address }}
+            <ul>
+            {% for error in form.address.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.item_types.label }}
+            {{ form.item_types }}
+            <ul>
+            {% for error in form.item_types.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+                
+            {{ form.submit }}
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

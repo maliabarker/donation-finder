@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Donation Places{% endblock %}
+{% block content %}
+    <div class="container">
+        <a href="/new_donation_place">Add New Donation Place</a>
+        {% for place in all_places %}
+            {{ place.title }}
+            {{ place.address }}
+            <a href="/view_donation_place/{{ place.id }}">View Place</a>
+        {% endfor %}
+    </div>
+{% endblock %}
