@@ -2,6 +2,8 @@ from donation_app import db
 from flask_login import UserMixin
 from sqlalchemy_utils import URLType
 import enum
+from sqlalchemy.ext.mutable import MutableList
+from sqlalchemy import PickleType
 
 
 class FormEnum(enum.Enum):
@@ -13,6 +15,7 @@ class FormEnum(enum.Enum):
     def __str__(self):
         return str(self.value)
 
+
 class ItemType(FormEnum):
     CLOTHING =        'Clothing'
     FURNITURE =       'Furniture'
@@ -20,6 +23,7 @@ class ItemType(FormEnum):
     BOOKS =           'Books'
     HOME_AND_GARDEN = 'Home and Garden'
     TOYS =            'Toys'
+    COLLECTABLES =    'Collectables'
     MISC =            'Miscellaneous'
 
 
@@ -27,10 +31,13 @@ class DonationPlace(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(80), nullable=False)
     address = db.Column(db.String(120), unique=True)
-    item_types = db.Column(db.String(120))
+    description = db.Column(db.String(120))
+    item_types = db.Column(MutableList.as_mutable(PickleType),
+                                    default=[])
     items = db.relationship('DonationItem', secondary='donation_place_item_list')
     date_added = db.Column(db.Date)
     favorited_by = db.relationship('User', secondary='user_place')
+    ### STRETCH: add pictures to donation place and show slideshows on site (like yelp)
 
 
 class DonationItem(db.Model):

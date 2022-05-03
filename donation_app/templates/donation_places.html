@@ -2,11 +2,20 @@
 {% block title %}Donation Places{% endblock %}
 {% block content %}
     <div class="container">
+        <h2 class="mt-4">All Donation Locations</h2>
         <a href="/new_donation_place">Add New Donation Place</a>
-        {% for place in all_places %}
-            {{ place.title }}
-            {{ place.address }}
-            <a href="/view_donation_place/{{ place.id }}">View Place</a>
-        {% endfor %}
+        <div>
+            {%- for row in all_places|batch(3) %}
+                <div class="row text-center my-4">
+                {%- for place in row %}
+                    <div class="col-lg-4">
+                        <h6>{{ place.title }}</h6>
+                        {{ place.address }}
+                        <a href="/view_donation_place/{{ place.id }}">View Place</a>
+                    </div>
+                {%- endfor %}
+                </div>
+            {%- endfor %}
+        </div>
     </div>
 {% endblock %}

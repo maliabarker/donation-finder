@@ -2,16 +2,21 @@ import imp
 from tokenize import String
 from flask import Flask
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, SelectField, SubmitField, FloatField
+from wtforms import StringField, DateField, SelectField, SubmitField, SelectMultipleField, RadioField, widgets
 from wtforms_sqlalchemy.orm import QuerySelectField
 from wtforms.validators import DataRequired, Length, URL, ValidationError
-from donation_app.models import User, DonationItem, DonationPlace
+from donation_app.models import User, DonationItem, DonationPlace, ItemType
 from donation_app.extensions import bcrypt
+
+class MultiCheckboxField(SelectMultipleField):
+    widget = widgets.ListWidget(prefix_label=False)
+    option_widget = widgets.CheckboxInput()
 
 class DonationPlaceForm(FlaskForm):
     title = StringField('Donation Place Name', validators=[DataRequired(), Length(min=3, max=80)])
     address = StringField('Donation Place Address', validators=[DataRequired(), Length(min=3, max=120)])
-    item_types = StringField('Types of Items Accepted', validators=[Length(min=3, max=120)])
+    item_types = MultiCheckboxField('Types of Items Accepted', choices=ItemType.choices())
+    description = StringField('Description or Notes', validators=[Length(min=3, max=120)])
     submit = SubmitField('Add New Donation Place')
 
 

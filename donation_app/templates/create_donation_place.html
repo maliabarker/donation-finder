@@ -24,9 +24,24 @@
             </ul>
             
             {{ form.item_types.label }}
-            {{ form.item_types }}
+            <p></p>
+            {% for subfield in form.item_types %}
+                <tr>
+                    <td>{{ subfield }}</td>
+                    <td>{{ subfield.label }}</td>
+                </tr>
+            {% endfor %}
+
             <ul>
             {% for error in form.item_types.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+
+            {{ form.description.label }}
+            {{ form.description }}
+            <ul>
+            {% for error in form.description.errors %}
                 <li class="error">{{ error }}</li>
             {% endfor %}
             </ul>

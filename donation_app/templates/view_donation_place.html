@@ -1,6 +1,21 @@
 {% extends 'base.html' %}
 {% block title %}{{ place.title }}{% endblock %}
 {% block content %}
-    <a href="/donation_places">Back</a>
-    {{ place.title }}
+<div class="container">
+    <a href="/donation_places">← Back To Places</a>
+    <h2 class="text-center mt-4">{{ place.title }}</h2>
+
+    {% if place.description != None %}
+        <p>{{ place.description }}</p>
+    {% endif %}
+
+    {% if place.item_types != None %}
+        <p>Takes:</p>
+        <ul>
+        {% for item in items %}
+            <li>{{ item }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
+</div>
 {% endblock %}
