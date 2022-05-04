@@ -19,41 +19,9 @@ class DonationPlaceForm(FlaskForm):
     description = StringField('Description or Notes', validators=[Length(min=3, max=120)])
     submit = SubmitField('Add New Donation Place')
 
-
-# class GroceryItemForm(FlaskForm):
-#     """Form for adding/updating a GroceryItem."""
-#     name = StringField('Product Name',
-#         validators=[DataRequired(), Length(min=3, max=80)])
-#     price = FloatField('Product Price',
-#         validators=[DataRequired()])
-#     category = SelectField('Product Category', choices=ItemCategory.choices())
-#     photo_url = StringField('Product Photo URL')
-#     store = QuerySelectField('Store',
-#         query_factory=lambda: GroceryStore.query, allow_blank=False)
-#     submit = SubmitField('Add New Product')
-
-# class BookForm(FlaskForm):
-#     """Form to create a book."""
-#     title = StringField('Book Title',
-#         validators=[DataRequired(), Length(min=3, max=80)])
-#     publish_date = DateField('Date Published')
-#     author = QuerySelectField('Author',
-#         query_factory=lambda: Author.query, allow_blank=False)
-#     audience = SelectField('Audience', choices=Audience.choices())
-#     genres = QuerySelectMultipleField('Genres',
-#         query_factory=lambda: Genre.query)
-#     submit = SubmitField('Submit')
-
-
-# class AuthorForm(FlaskForm):
-#     name = StringField('Author Name',
-#         validators=[DataRequired(), Length(min=3, max=80)])
-#     biography = TextAreaField('Author Biography')
-#     # birthdate = DateField('Author Birthdate')
-#     submit = SubmitField('Submit')
-
-
-# class GenreForm(FlaskForm):
-#     name = StringField('Genre Name',
-#         validators=[DataRequired(), Length(min=3, max=80)])
-#     submit = SubmitField('Submit')
+class DonationItemForm(FlaskForm):
+    name = StringField('Item Name', validators=[DataRequired(), Length(min=3, max=80)])
+    description = StringField('Item Description', validators=[Length(min=3, max=200)])
+    photo = StringField('Item Photo Path')
+    item_type = SelectField('Item Type', choices=ItemType.choices())
+    submit = SubmitField('Add New Donation Item')

@@ -2,6 +2,7 @@
 {% block title %}Create New Donation Place{% endblock %}
 {% block content %}
 <div class="container">
+    <a href="/donation_places">← Back To Places</a>
     <form method="POST" action="{{ url_for('main.donation_places_new') }}">
         {{ form.csrf_token }}
         <fieldset>

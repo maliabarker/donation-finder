@@ -13,9 +13,11 @@
 <body>
     
     {% include 'partials/navbar.html' %}
-    {% for message in get_flashed_messages() %}
-        <p>{{ message }}</p>
-    {% endfor %}
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+            <p class="mt-2">{{ message }}</p>
+        {% endfor %}
+    </div>
 
     {% block content %}{% endblock %}
     <!-- Bootstrap Bundle with Popper -->

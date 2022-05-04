@@ -31,10 +31,12 @@ def login():
         user = User.query.filter_by(username=form.username.data).first()
         login_user(user, remember=True)
         next_page = request.args.get('next')
+        flash(f'Logged in as {current_user.username}')
         return redirect(next_page if next_page else url_for('main.homepage'))
     return render_template('login.html', form=form)
 
 @auth.route('/logout')
 def logout():
     logout_user()
+    flash(f'Successfully logged out')
     return redirect(url_for('main.homepage'))

@@ -9,7 +9,7 @@
         <p>{{ place.description }}</p>
     {% endif %}
 
-    {% if place.item_types != None %}
+    {% if place.item_types | length > 0 %}
         <p>Takes:</p>
         <ul>
         {% for item in items %}

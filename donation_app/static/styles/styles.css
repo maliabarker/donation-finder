@@ -6,3 +6,9 @@ nav {
     background-color: #eaebec;
     margin-top: 70px;
 }
+
+#donation_item_img {
+    width: 300px;
+    height: 300px;
+    object-fit: contain;
+}

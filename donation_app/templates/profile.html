@@ -1,7 +1,22 @@
 {% extends 'base.html' %}
-{% block title %}{{ current_user.username }}'s Profile{% endblock %}
+{% block title %}{{ user.username }}'s Profile{% endblock %}
 {% block content %}
     <div class="container">
-        <h1 class="mt-4">Welcome {{ current_user.username }}</h1>
+        <h1 class="mt-4">Welcome {{ user.username }}</h1>
+        <a href="/items/{{ user.username }}">View Donation Items</a>
+        {#
+        {% if user.favorite_places | length > 0 %}
+            <p>{{ user.username }}'s Favorite Donation Places</p>
+            <ul>
+                {% for place in user.favorite_places %}
+                    <li>
+                        <a href="/view_donation_place/{{ place.id }}">{{ place.title }}</a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>{{ user.username }} has no favorite donation places yet!</p>
+        {% endif %}
+        #}
     </div>
 {% endblock %}

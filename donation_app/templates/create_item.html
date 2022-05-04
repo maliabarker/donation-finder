@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Create New Donation Item{% endblock %}
+{% block content %}
+<div class="container">
+    <form method="POST" action="/items/create">
+        {{ form.csrf_token }}
+        <fieldset>
+            <legend>Create a New Donation Item</legend>
+
+            {{ form.name.label }}
+            {{ form.name }}
+            <ul>
+            {% for error in form.name.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.description.label }}
+            {{ form.description }}
+            <ul>
+            {% for error in form.description.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+
+            {{ form.photo.label }}
+            {{ form.photo }}
+            <ul>
+            {% for error in form.photo.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.item_type.label }}
+            {{ form.item_type }}
+
+            <ul>
+            {% for error in form.item_type.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+                
+            <!-- <button type="submit">Submit</button> -->
+            {{form.submit}}
+        </fieldset>
+    </form>
+</div>
+{% endblock %}

@@ -3,7 +3,7 @@ from flask_login import UserMixin
 from sqlalchemy_utils import URLType
 import enum
 from sqlalchemy.ext.mutable import MutableList
-from sqlalchemy import PickleType
+from sqlalchemy import ForeignKey, PickleType
 
 
 class FormEnum(enum.Enum):
@@ -35,6 +35,7 @@ class DonationPlace(db.Model):
     item_types = db.Column(MutableList.as_mutable(PickleType),
                                     default=[])
     items = db.relationship('DonationItem', secondary='donation_place_item_list')
+    # adds items to donation place from user item list, but cannot add items from donation place
     date_added = db.Column(db.Date)
     favorited_by = db.relationship('User', secondary='user_place')
     ### STRETCH: add pictures to donation place and show slideshows on site (like yelp)
@@ -46,9 +47,10 @@ class DonationItem(db.Model):
     description = db.Column(db.String(200))
     photo = db.Column(URLType)
     item_type = db.Column(db.Enum(ItemType), default=ItemType.MISC)
-    donation_place = db.relationship('DonationPlace', secondary='donation_place_item_list')
+    donation_place = db.relationship('DonationPlace', secondary='donation_place_item_list', back_populates='items')
     date_added = db.Column(db.Date)
-    created_by = db.relationship('User', secondary='user_item')
+    created_by_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    created_by = db.relationship('User')
 
 
 class User(UserMixin, db.Model):
@@ -56,14 +58,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(80), nullable=False, unique=True)
     password = db.Column(db.String(80), nullable=False)
-    donation_items = db.relationship('DonationItem', secondary='user_item')
-    favorite_places = db.relationship('DonationPlace', secondary='user_place')
+    favorite_places = db.relationship('DonationPlace', secondary='user_place', back_populates='favorited_by')
 
-
-user_items_table = db.Table('user_item',
-    db.Column('item_id', db.Integer, db.ForeignKey('donation_item.id')),
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id'))
-)
 
 favorite_donation_places_table = db.Table('user_place',
     db.Column('place_id', db.Integer, db.ForeignKey('donation_place.id')),
