@@ -98,3 +98,45 @@ def create_item():
         return redirect(url_for('main.view_items', username=current_user.username))
     return render_template('create_item.html', form=form)
 
+@main.route('/items/<item_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_item(item_id):
+    item = DonationItem.query.filter_by(id=item_id).one()
+    form = DonationItemForm(obj=item)
+
+    if form.validate_on_submit():
+        # if img_file != None and os.path.isfile(path) == False:
+        if form.photo.data.filename:
+            print('FILE NOT NULL, UPDATING FILENAME')
+            image_dir = os.path.join(
+                os.path.dirname(app.instance_path), 'donation_app/static/img'
+            )
+            img_file = form.photo.data
+            # print(f'PROVIDED FILENAME {img_file.filename}')
+            filename = secure_filename(img_file.filename)
+            img_file.save(os.path.join(image_dir, filename))
+            item.photo = img_file.filename
+
+        item.name = form.name.data
+        item.description = form.description.data
+        item.item_type = form.item_type.data
+
+        item = db.session.merge(item)
+        db.session.add(item)
+        db.session.commit()
+
+        flash(f'Updated {item.name}')
+        return redirect(url_for('main.view_items', username=current_user.username))
+    return render_template('edit_item.html', form=form, item=item)
+
+@main.route('/items/<item_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_item(item_id):
+    item = DonationItem.query.filter_by(id=item_id).one()
+    # print(item)
+    item = db.session.merge(item)
+    db.session.delete(item)
+    db.session.commit()
+    flash(f'Deleted {item.name}')
+    # stretch challenge: try to add an undo button??
+    return redirect(url_for('main.view_items', username=current_user.username))

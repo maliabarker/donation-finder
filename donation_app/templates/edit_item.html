@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% block title %}Edit Donation Item{% endblock %}
+{% block content %}
+<div class="container">
+    <a href="/items/{{current_user.username}}">← Back To Items</a>
+    <form method="POST" action="/items/{{ item.id }}/edit" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <fieldset>
+            <legend>Edit {{ item.name }}</legend>
+
+            {{ form.name.label }}
+            {{ form.name }}
+            <ul>
+            {% for error in form.name.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.description.label }}
+            {{ form.description }}
+            <ul>
+            {% for error in form.description.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+
+            {{ form.photo.label }}
+            {{ form.photo }}
+            <ul>
+            {% for error in form.photo.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+            
+            {{ form.item_type.label }}
+            {{ form.item_type }}
+
+            <ul>
+            {% for error in form.item_type.errors %}
+                <li class="error">{{ error }}</li>
+            {% endfor %}
+            </ul>
+                
+            <!-- <button type="submit">Submit</button> -->
+            {{form.submit}}
+        </fieldset>
+    </form>
+</div>
+{% endblock %}
