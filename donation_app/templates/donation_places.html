@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container">
         <h2 class="mt-4">All Donation Locations</h2>
-        <a href="/new_donation_place">Add New Donation Place</a>
+        <a href="/new_donation_place" class="btn btn-primary">Add New Donation Place</a>
         <div>
             {%- for row in all_places|batch(3) %}
                 <div class="row text-center my-4">

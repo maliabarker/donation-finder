@@ -25,6 +25,12 @@ def decode_itemtype(array_of_items):
 def homepage():
     return render_template('home.html')
 
+###################################
+###################################
+###       Donation Places       ###
+###################################
+###################################
+
 @main.route('/donation_places')
 def donation_places_index():
     all_places = DonationPlace.query.all()
@@ -51,6 +57,12 @@ def donation_places_new():
         db.session.commit()
         return redirect(url_for('main.donation_place_view', donation_place_id=place.id))
     return render_template('create_donation_place.html', form=form)
+
+###################################
+###################################
+###  Profiles & Donation Items  ###
+###################################
+###################################
 
 @main.route('/profile/<username>')
 @login_required

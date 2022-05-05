@@ -2,17 +2,20 @@
 {% block title %}{{ user.username }}'s Items{% endblock %}
 {% block content %}
 <div class="container">
-    <a href="/profile/{{user.username}}">← Back To User Profile</a>
-    <a href="/items/create">Add An Item</a>
+    <a href="/profile/{{user.username}}">← Back To User Profile</a><br>
+
+    {% if user == current_user %}
+        <a href="/items/create" class="btn btn-primary mt-4">Add An Item</a>
+    {% endif %}
+    
 
     {% if user_items | length > 0 %}
-
         {% for row in user_items|batch(3) %}
             <div class="row my-4">
                 {% for item in row %}
                     <div class="col-lg-4">
                         <img src="{{ url_for('static', filename='img/' + item.photo) }}" alt=""  id="donation_item_img" class="img-fluid">
-                        <p>{{ item.name }}</p>
+                        <p style="font-size: 20px;">{{ item.name }}</p>
                         <p>{{ item.description }}</p>
                         <p>Item Type: {{ item.item_type }}</p>
                         <a href="/items/{{ item.id }}/edit" class="btn btn-secondary">Edit</a>

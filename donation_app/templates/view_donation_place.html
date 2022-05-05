@@ -10,12 +10,13 @@
     {% endif %}
 
     {% if place.item_types | length > 0 %}
-        <p>Takes:</p>
+        <p>Items Accepted:</p>
         <ul>
         {% for item in items %}
             <li>{{ item }}</li>
         {% endfor %}
         </ul>
     {% endif %}
+    <a href="/donation_place"></a>
 </div>
 {% endblock %}
