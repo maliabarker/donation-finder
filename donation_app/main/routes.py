@@ -4,6 +4,8 @@ from flask_login import current_user
 from datetime import date, datetime
 from donation_app.models import ItemType, User, DonationPlace, DonationItem
 from donation_app.main.forms import DonationPlaceForm, DonationItemForm
+import os
+from werkzeug.utils import secure_filename
 
 from donation_app.extensions import app, db, bcrypt
 
@@ -61,8 +63,6 @@ def profile(username):
 def view_items(username):
     user = User.query.filter_by(username=username).one()
     items = DonationItem.query.filter_by(created_by_id=user.id).all()
-    print(user.id)
-    print(items)
     return render_template('items.html', user=user, user_items=items)
 
 @main.route('/items/create', methods=['GET', 'POST'])
@@ -72,13 +72,20 @@ def create_item():
     
     if form.validate_on_submit():
         merged_user = db.session.merge(current_user)
-        print('————————————————')
-        print(merged_user)
-        print('————————————————')   
+
+        image_dir = os.path.join(
+            os.path.dirname(app.instance_path), 'donation_app/static/img'
+        )
+
+        img_file = form.photo.data
+        # print(f'PROVIDED FILENAME {img_file.filename}')
+        filename = secure_filename(img_file.filename)
+        img_file.save(os.path.join(image_dir, filename))
+
         new_item = DonationItem(
             name = form.name.data,
             description = form.description.data,
-            photo = form.photo.data,
+            photo = img_file.filename,
             item_type = form.item_type.data,
             date_added = datetime.now(),
             created_by = merged_user
@@ -87,8 +94,6 @@ def create_item():
         db.session.add(new_item)
         db.session.commit()
         flash('New Item Added')
-        # items = DonationItem.query.filter_by(created_by_id=user.id)
-        # print(items)
 
         return redirect(url_for('main.view_items', username=current_user.username))
     return render_template('create_item.html', form=form)

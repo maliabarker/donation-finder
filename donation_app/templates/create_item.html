@@ -2,7 +2,7 @@
 {% block title %}Create New Donation Item{% endblock %}
 {% block content %}
 <div class="container">
-    <form method="POST" action="/items/create">
+    <form method="POST" action="/items/create" enctype="multipart/form-data">
         {{ form.csrf_token }}
         <fieldset>
             <legend>Create a New Donation Item</legend>

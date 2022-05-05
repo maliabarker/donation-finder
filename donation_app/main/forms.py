@@ -2,7 +2,8 @@ import imp
 from tokenize import String
 from flask import Flask
 from flask_wtf import FlaskForm
-from wtforms import StringField, DateField, SelectField, SubmitField, SelectMultipleField, RadioField, widgets
+from wtforms import StringField, DateField, SelectField, SubmitField, SelectMultipleField, RadioField, widgets, FileField
+from flask_wtf.file import FileAllowed
 from wtforms_sqlalchemy.orm import QuerySelectField
 from wtforms.validators import DataRequired, Length, URL, ValidationError
 from donation_app.models import User, DonationItem, DonationPlace, ItemType
@@ -22,6 +23,7 @@ class DonationPlaceForm(FlaskForm):
 class DonationItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired(), Length(min=3, max=80)])
     description = StringField('Item Description', validators=[Length(min=3, max=200)])
-    photo = StringField('Item Photo Path')
+    # photo = StringField('Item Photo Path')
+    photo = FileField('Item Image File', validators=[FileAllowed(['png'], 'PNG Image only!')])
     item_type = SelectField('Item Type', choices=ItemType.choices())
     submit = SubmitField('Add New Donation Item')
