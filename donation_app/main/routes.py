@@ -40,23 +40,91 @@ def donation_places_index():
 def donation_place_view(donation_place_id):
     place = DonationPlace.query.filter_by(id=donation_place_id).one()
     items = decode_itemtype(place.item_types)
+    # print(place.favorited_by)
     return render_template('view_donation_place.html', place=place, items=items)
 
 @main.route('/new_donation_place', methods=['GET', 'POST'])
 def donation_places_new():
     form = DonationPlaceForm()
     if form.validate_on_submit():
+        image_dir = os.path.join(
+            os.path.dirname(app.instance_path), 'donation_app/static/img'
+        )
+
+        files_filenames = []
+        for file in form.photos.data:
+            file_filename = secure_filename(file.filename)
+            file.save(os.path.join(image_dir, file_filename))
+            files_filenames.append(file_filename)
+
+        print(files_filenames)
+
         place = DonationPlace(
             title = form.title.data,
             address = form.address.data,
             item_types = form.item_types.data,
             description = form.description.data,
-            date_added = datetime.now()
+            date_added = datetime.now(),
+            photos = files_filenames
         )
         db.session.add(place)
         db.session.commit()
         return redirect(url_for('main.donation_place_view', donation_place_id=place.id))
     return render_template('create_donation_place.html', form=form)
+
+@main.route('/<donation_place_id>/edit', methods=['GET', 'POST'])
+@login_required
+def edit_donation_place(donation_place_id):
+    place = DonationPlace.query.filter_by(id=donation_place_id).one()
+    form = DonationPlaceForm(obj=place)
+
+    if form.validate_on_submit():
+        for file in form.photos.data:
+            if file.filename:
+                image_dir = os.path.join(
+                    os.path.dirname(app.instance_path), 'donation_app/static/img'
+                )
+                print('FILE NOT NULL, UPDATING FILENAME')
+                file_filename = secure_filename(file.filename)
+                file.save(os.path.join(image_dir, file_filename))
+                place.photos.append(file_filename)
+
+        place.title = form.title.data
+        place.address = form.address.data
+        place.item_types = form.item_types.data
+        place.description = form.description.data
+        
+
+        place = db.session.merge(place)
+        db.session.add(place)
+        db.session.commit()
+
+        flash(f'Updated {place.title}')
+        return redirect(url_for('main.donation_place_view', donation_place_id=place.id))
+    return render_template('edit_donation_place.html', form=form, place=place)
+
+@main.route('/<donation_place_id>/delete', methods=['GET', 'POST'])
+@login_required
+def delete_donation_place(donation_place_id):
+    place = DonationPlace.query.filter_by(id=donation_place_id).one()
+    place = db.session.merge(place)
+    db.session.delete(place)
+    db.session.commit()
+    flash(f'Deleted {place.title}')
+    # stretch challenge: try to add an undo button??
+    return redirect(url_for('main.donation_places_index'))
+
+
+@main.route('/<place_id>/add_favorite_place', methods=['GET', 'POST'])
+@login_required
+def add_favorite_place(place_id):
+    place = DonationPlace.query.filter_by(id=place_id).one()
+    current_user.favorite_places.append(place)
+    merged_user = db.session.merge(current_user)
+    db.session.add(merged_user)
+    db.session.commit()
+    flash(f'Added {place.title} to your favorite places')
+    return redirect(url_for('main.donation_place_view', donation_place_id=place.id))
 
 ###################################
 ###################################

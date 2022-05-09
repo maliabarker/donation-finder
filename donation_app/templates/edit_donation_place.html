@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
-{% block title %}Create New Donation Place{% endblock %}
+{% block title %}Edit Donation Item{% endblock %}
 {% block content %}
 <div class="container">
     <a href="/donation_places">← Back To Places</a>
-    <form method="POST" action="{{ url_for('main.donation_places_new') }}" enctype="multipart/form-data">
+    <form method="POST" action="/{{place.id}}/edit" enctype="multipart/form-data">
         {{ form.csrf_token }}
         <fieldset>
-            <legend>Create a New Donation Place</legend>
+            <legend>Edit {{ place.title }}</legend>
 
             {{ form.title.label }}
             {{ form.title }}
@@ -38,7 +38,6 @@
                 <li class="error">{{ error }}</li>
             {% endfor %}
             </ul>
-            <!-- STRETCH: add a select all feature -->
 
             {{ form.description.label }}
             {{ form.description }}

@@ -38,6 +38,8 @@ class DonationPlace(db.Model):
     # adds items to donation place from user item list, but cannot add items from donation place
     date_added = db.Column(db.Date)
     favorited_by = db.relationship('User', secondary='user_place')
+    photos = db.Column(MutableList.as_mutable(PickleType),
+                                    default=[])
     ### STRETCH: add pictures to donation place and show slideshows on site (like yelp)
 
 
